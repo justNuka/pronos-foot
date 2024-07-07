@@ -43,20 +43,22 @@ function loadPredictions() {
             predictionsDiv.innerHTML = '';
             predictions.forEach(prediction => {
                 const div = document.createElement('div');
+                div.className = 'col-md-4 mb-4';
                 const formattedDateTime = formatDate(prediction.date, prediction.time);
 
                 // Inner HTML vulnérable à XSS
                 div.innerHTML = `
-                    <div class="prediction">
-                        <p>Team 1: ${prediction.team1}</p>
-                        <p>Team 2: ${prediction.team2}</p>
-                        <p>Prediction: ${prediction.prediction}</p>
-                        <p>Date: ${formattedDateTime}</p>
-                        <p>Stage: ${prediction.stage}</p>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${(prediction.team1)} vs ${(prediction.team2)}</h5>
+                            <p class="card-text"><strong>Prediction:</strong> ${(prediction.prediction)}</p>
+                            <p class="card-text"><strong>Date:</strong> ${formattedDateTime}</p>
+                            <p class="card-text"><strong>Stage:</strong> ${(prediction.stage)}</p>
+                        </div>
                     </div>
                 `;
                 predictionsDiv.appendChild(div);
-                executeScripts(div); // Exécute les scripts injectés -- vulnérabilité XSS à ne pas mettre en prod
+                executeScripts(div); // Exécute les scripts injectés -- vulnérabilité XSS à pas mettre en prod
             });
         })
         .catch(error => {

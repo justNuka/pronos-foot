@@ -8,12 +8,15 @@ $(document).ready(function() {
                 let predictionsHtml = '';
                 predictions.forEach(prediction => {
                     predictionsHtml += `
-                        <div class="prediction">
-                            <p>Team 1: ${prediction.team1}</p>
-                            <p>Team 2: ${prediction.team2}</p>
-                            <p>Prediction: ${prediction.prediction}</p>
-                            <p>Date: ${formatDate(prediction.date, prediction.time)}</p>
-                            <p>Stage: ${prediction.stage}</p>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">${prediction.team1} vs ${prediction.team2}</h5>
+                                    <p class="card-text"><strong>Prediction:</strong> ${prediction.prediction}</p>
+                                    <p class="card-text"><strong>Date:</strong> ${formatDate(prediction.date, prediction.time)}</p>
+                                    <p class="card-text"><strong>Stage:</strong> ${prediction.stage}</p>
+                                </div>
+                            </div>
                         </div>
                     `;
                 });
