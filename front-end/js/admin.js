@@ -1,4 +1,16 @@
 $(document).ready(function() {
+    // Fonction pour échapper les entrées utilisateur
+    function escapeHtml(text) {
+        var map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
     // Fonction pour charger les prédictions sur la page admin
     function loadPredictions() {
         $.ajax({
@@ -8,12 +20,15 @@ $(document).ready(function() {
                 let predictionsHtml = '';
                 predictions.forEach(prediction => {
                     predictionsHtml += `
-                        <div class="prediction">
-                            <p>Team 1: ${prediction.team1}</p>
-                            <p>Team 2: ${prediction.team2}</p>
-                            <p>Prediction: ${prediction.prediction}</p>
-                            <p>Date: ${formatDate(prediction.date, prediction.time)}</p>
-                            <p>Stage: ${prediction.stage}</p>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">${escapeHtml(prediction.team1)} vs ${escapeHtml(prediction.team2)}</h5>
+                                    <p class="card-text"><strong>Prediction:</strong> ${escapeHtml(prediction.prediction)}</p>
+                                    <p class="card-text"><strong>Date:</strong> ${formatDate(prediction.date, prediction.time)}</p>
+                                    <p class="card-text"><strong>Stage:</strong> ${escapeHtml(prediction.stage)}</p>
+                                </div>
+                            </div>
                         </div>
                     `;
                 });
@@ -23,6 +38,12 @@ $(document).ready(function() {
                 console.error('Erreur lors du chargement des prédictions:', error);
             }
         });
+    }
+
+    // Fonction pour réinitialiser le formulaire
+    function resetForm() {
+        form = document.getElementById('predictionForm');
+        form.reset();
     }
 
     // Soumission du formulaire de prédiction
@@ -55,6 +76,7 @@ $(document).ready(function() {
                     title: 'Success',
                     text: 'Ajout de prédiction réussi',
                 });
+                resetForm();
                 loadPredictions();
             },
             error: function(error) {
@@ -69,20 +91,20 @@ $(document).ready(function() {
     });
 
     loadPredictions();
-});
 
-// Fonction pour formater la date
-function formatDate(dateString, timeString) {
-    const date = new Date(`${dateString}T${timeString}`);
-    const formattedDate = new Intl.DateTimeFormat('fr-FR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    }).format(date);
-    const formattedTime = new Intl.DateTimeFormat('fr-FR', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: false
-    }).format(date);
-    return `${formattedDate} à ${formattedTime}`;
-}
+    // Fonction pour formater la date
+    function formatDate(dateString, timeString) {
+        const date = new Date(`${dateString}T${timeString}`);
+        const formattedDate = new Intl.DateTimeFormat('fr-FR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }).format(date);
+        const formattedTime = new Intl.DateTimeFormat('fr-FR', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: false
+        }).format(date);
+        return `${formattedDate} à ${formattedTime}`;
+    }
+});

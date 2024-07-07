@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { login, getProfile } = require('../controllers/authController');
+const profileController = require('../controllers/profileController');
+const authController = require('../controllers/authController');
 
-router.post('/login', login);
-router.get('/profile/:id', getProfile);
+router.get('/:id', authController.authenticateJWT, profileController.getProfile);
 
 module.exports = router;
